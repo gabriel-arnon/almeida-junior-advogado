@@ -131,6 +131,10 @@ npm run build
 npx playwright test
 ```
 
+## CI
+
+GitHub Actions runs on pushes to `main` and pull requests targeting `main`. The workflow installs dependencies with `npm ci`, installs Playwright Chromium, then runs lint, typecheck, build, and Playwright tests with `CONTACT_FORM_MODE=mock`, indexing disabled, and no email provider or Resend credentials.
+
 Accessibility validation combines automated checks, browser inspection, Lighthouse, and manual review. Playwright alone is not treated as full contrast validation.
 
 Do not enable production indexing until final legal, privacy, content, domain, email, analytics, and monitoring checks are complete.
