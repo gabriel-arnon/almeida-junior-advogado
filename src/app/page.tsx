@@ -1,5 +1,4 @@
 import { CommonSituations } from "@/components/sections/CommonSituations";
-import { Differentiators } from "@/components/sections/Differentiators";
 import { DocumentsSteps } from "@/components/sections/DocumentsSteps";
 import { Faq } from "@/components/sections/Faq";
 import { FinalCta } from "@/components/sections/FinalCta";
@@ -21,10 +20,9 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqStructuredData()) }}
       />
       <Hero />
+      <LawyerProfile />
       <CommonSituations />
       <ServiceProcess />
-      <Differentiators />
-      <LawyerProfile />
       <DocumentsSteps />
       <RegionsOffices />
       <Faq />

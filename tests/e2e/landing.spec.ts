@@ -29,7 +29,6 @@ test("homepage renders required static sections", async ({ page }) => {
   for (const sectionName of [
     "Conflitos bancários",
     "Atendimento objetivo",
-    "Clareza, identificação",
     "Grimaldo de Almeida Junior",
     "Documentos úteis",
     "Atendimento presencial",

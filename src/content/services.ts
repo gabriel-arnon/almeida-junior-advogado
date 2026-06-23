@@ -7,8 +7,7 @@ export const bankingSituations = [
   "Disputas envolvendo cartão de crédito consignado",
   "Juros bancários e discussões contratuais",
   "Financiamento de veículos",
-  "Negativação indevida",
-  "Conflitos com instituições financeiras"
+  "Negativação indevida"
 ] as const;
 
 export const serviceSteps = [

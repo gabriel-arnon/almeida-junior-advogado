@@ -26,16 +26,12 @@ export function CommonSituations() {
           <h2 className="mt-3 text-3xl font-semibold text-navy md:text-4xl">
             Conflitos bancários que exigem análise individual
           </h2>
-          <p className="mt-4 text-base leading-7 text-graphite-soft">
-            A página inicial organiza os temas mais frequentes sem prometer resultado. Cada caso
-            depende de documentos, contexto e avaliação jurídica própria.
-          </p>
         </div>
-        <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="mt-8 grid items-stretch gap-4 md:grid-cols-2 lg:grid-cols-3">
           {bankingSituations.map((item) => (
             <li
               key={item}
-              className="flex min-h-24 gap-3 border border-light-gray bg-white p-4 text-sm font-semibold leading-6 text-graphite transition hover:border-gold/55"
+              className="flex min-h-28 gap-3 border border-light-gray bg-white p-4 text-sm font-semibold leading-6 text-graphite transition hover:border-gold/55"
             >
               <span className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-full bg-gold/10">
                 <SituationIcon />

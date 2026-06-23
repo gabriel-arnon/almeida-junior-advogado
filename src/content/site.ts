@@ -15,9 +15,9 @@ export const siteConfig = {
   regionalPositioning:
     "Atendimento presencial em Santos e Bertioga, com atuação na Baixada Santista, Litoral Sul e Grande São Paulo. Atendimento on-line mediante agendamento.",
   navItems: [
+    { href: "#perfil", label: "Perfil" },
     { href: "#situacoes", label: "Situações" },
     { href: "#como-funciona", label: "Atendimento" },
-    { href: "#perfil", label: "Perfil" },
     { href: "#documentos", label: "Documentos" },
     { href: "#regioes", label: "Regiões" },
     { href: "#faq", label: "FAQ" }
