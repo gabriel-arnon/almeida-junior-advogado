@@ -1,11 +1,21 @@
 import { existsSync, readFileSync, rmSync } from "node:fs";
+import { renameSync } from "node:fs";
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
 
 const pidPath = join(process.cwd(), "test-results", "playwright-server.pid");
+const envLocalPath = join(process.cwd(), ".env.local");
+const envLocalBackupPath = join(process.cwd(), "test-results", "playwright.env.local.backup");
+
+function restoreLocalEnvFile() {
+  if (!existsSync(envLocalPath) && existsSync(envLocalBackupPath)) {
+    renameSync(envLocalBackupPath, envLocalPath);
+  }
+}
 
 export default async function globalTeardown() {
   if (!existsSync(pidPath)) {
+    restoreLocalEnvFile();
     return;
   }
 
@@ -27,4 +37,5 @@ export default async function globalTeardown() {
   }
 
   rmSync(pidPath, { force: true });
+  restoreLocalEnvFile();
 }
