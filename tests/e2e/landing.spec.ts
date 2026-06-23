@@ -39,6 +39,19 @@ test("homepage renders required static sections", async ({ page }) => {
   }
 });
 
+test("lawyer profile renders the professional portrait", async ({ page }) => {
+  await page.goto("/");
+
+  const profile = page.locator("#perfil");
+  const portrait = profile.getByRole("img", {
+    name: "Grimaldo de Almeida Junior, advogado inscrito na OAB/SP 424.479"
+  });
+
+  await expect(portrait).toBeVisible();
+  await expect(portrait).toHaveAttribute("src", /grimaldo-almeida-junior\.webp/);
+  await expect(profile.getByText("GA", { exact: true })).toHaveCount(0);
+});
+
 test("anchor navigation reaches expected homepage sections", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("link", { name: "FAQ" }).click();

@@ -3,7 +3,6 @@
 Production remains blocked until these items are complete:
 
 - Final SVG logo.
-- Professional photograph.
 - Domain registration for the intended future domain, `almeidajunioradvogado.com.br`.
 - Hosting choice.
 - Email provider account and verified sender.
@@ -14,6 +13,10 @@ Production remains blocked until these items are complete:
 - External production-ready rate-limit provider.
 - Upstash Redis REST URL/token and server-side salt, if Upstash is selected.
 - Resend domain verification and verified sender address.
+
+Completed items:
+
+- Professional photograph saved at `public/images/grimaldo-almeida-junior.webp`.
 
 Additional confirmations:
 
