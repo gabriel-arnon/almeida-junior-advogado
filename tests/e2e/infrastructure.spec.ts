@@ -42,21 +42,43 @@ const emailEnv: ServerEnv = {
   CONTACT_EMAIL_API_KEY: "test-secret"
 };
 
+const memoryRateLimitEnv: NodeJS.ProcessEnv = {
+  NODE_ENV: "development",
+  CONTACT_RATE_LIMIT_PROVIDER: "memory",
+  CONTACT_RATE_LIMIT_WINDOW_SECONDS: "900",
+  CONTACT_RATE_LIMIT_MAX_REQUESTS: "5",
+  NEXT_PUBLIC_INDEXING_ENABLED: "false"
+};
+
+const externalRateLimitEnv: NodeJS.ProcessEnv = {
+  NODE_ENV: "development",
+  CONTACT_RATE_LIMIT_PROVIDER: "upstash",
+  CONTACT_RATE_LIMIT_WINDOW_SECONDS: "900",
+  CONTACT_RATE_LIMIT_MAX_REQUESTS: "5",
+  CONTACT_RATE_LIMIT_SALT: "test-rate-limit-salt",
+  CONTACT_RATE_LIMIT_UPSTASH_REST_URL: "https://example-upstash.test",
+  CONTACT_RATE_LIMIT_UPSTASH_REST_TOKEN: "test-token",
+  NEXT_PUBLIC_INDEXING_ENABLED: "false"
+};
+
 test("environment validation follows active mode rules", () => {
-  expect(validateServerEnv({ ...process.env, NODE_ENV: "production", CONTACT_FORM_MODE: "mock" }).ok).toBe(
-    false
-  );
   expect(
     validateServerEnv({
-      ...process.env,
+      ...externalRateLimitEnv,
       NODE_ENV: "production",
-      CONTACT_FORM_MODE: "disabled",
-      CONTACT_RATE_LIMIT_PROVIDER: "memory"
+      CONTACT_FORM_MODE: "mock"
+    }).ok
+  ).toBe(false);
+  expect(
+    validateServerEnv({
+      ...memoryRateLimitEnv,
+      NODE_ENV: "production",
+      CONTACT_FORM_MODE: "disabled"
     }).ok
   ).toBe(true);
   expect(
     validateServerEnv({
-      ...process.env,
+      ...memoryRateLimitEnv,
       NODE_ENV: "development",
       CONTACT_FORM_MODE: "email",
       CONTACT_EMAIL_PROVIDER: "resend"
@@ -64,7 +86,7 @@ test("environment validation follows active mode rules", () => {
   ).toBe(false);
   expect(
     validateServerEnv({
-      ...process.env,
+      ...externalRateLimitEnv,
       NODE_ENV: "production",
       VERCEL_ENV: "preview",
       CONTACT_FORM_MODE: "mock"
@@ -72,7 +94,7 @@ test("environment validation follows active mode rules", () => {
   ).toBe(false);
   expect(
     validateServerEnv({
-      ...process.env,
+      ...memoryRateLimitEnv,
       NODE_ENV: "production",
       VERCEL_ENV: "preview",
       CONTACT_FORM_MODE: "disabled"
