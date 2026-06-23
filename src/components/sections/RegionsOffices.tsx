@@ -1,6 +1,29 @@
 import { offices, serviceRegions } from "@/content/offices";
 import { siteConfig } from "@/content/site";
 
+function mapsUrl(address: string) {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+}
+
+function officeMapsUrl(office: (typeof offices)[number]) {
+  return "mapsUrl" in office ? office.mapsUrl : mapsUrl(office.address);
+}
+
+function ExternalLinkIcon() {
+  return (
+    <svg viewBox="0 0 20 20" className="h-4 w-4" aria-hidden="true">
+      <path
+        d="M7 5h8v8M15 5l-9.5 9.5M5 8v7h7"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.7"
+      />
+    </svg>
+  );
+}
+
 export function RegionsOffices() {
   return (
     <section id="regioes" className="section-y scroll-mt-36 bg-light-gray/30">
@@ -16,15 +39,34 @@ export function RegionsOffices() {
             {siteConfig.regionalPositioning}
           </p>
         </div>
-        <div className="mt-8 grid gap-5 md:grid-cols-2">
+        <div className="mt-8 grid items-stretch gap-5 md:grid-cols-2">
           {offices.map((office) => (
-            <address key={office.city} className="not-italic border border-light-gray bg-white p-5 md:p-6">
-              <h3 className="text-xl font-semibold text-navy">{office.city}</h3>
-              <p className="mt-2 text-sm text-graphite-soft">Atendimento presencial por agendamento.</p>
-              <div className="mt-4 space-y-1.5 leading-7 text-graphite">
+            <address
+              key={office.city}
+              className="flex h-full flex-col border border-light-gray bg-white p-5 not-italic md:p-6"
+            >
+              <div>
+                <h3 className="text-2xl font-semibold text-navy">{office.city}</h3>
+                <p className="mt-2 text-sm font-semibold uppercase tracking-[0.12em] text-gold">
+                  {office.attendance}
+                </p>
+              </div>
+              <div className="mt-5 space-y-1.5 leading-7 text-graphite">
                 {office.lines.map((line) => (
                   <p key={line}>{line}</p>
                 ))}
+              </div>
+              <div className="mt-auto pt-6">
+                <a
+                  href={officeMapsUrl(office)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Ver ${office.city} no Google Maps (abre em nova aba)`}
+                  className="inline-flex min-h-11 w-fit items-center gap-2 border border-navy px-4 py-2 text-sm font-semibold text-navy transition hover:bg-navy hover:text-white focus-visible:bg-navy focus-visible:text-white"
+                >
+                  Ver no Google Maps
+                  <ExternalLinkIcon />
+                </a>
               </div>
             </address>
           ))}
