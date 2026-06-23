@@ -1,5 +1,5 @@
 export const legalContentMeta = {
-  lastUpdated: "22 de junho de 2026"
+  lastUpdated: "23 de junho de 2026"
 } as const;
 
 export const privacySections = [
