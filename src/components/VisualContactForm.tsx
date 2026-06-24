@@ -145,14 +145,17 @@ export function VisualContactForm() {
 
   return (
     <section
-      aria-labelledby="formulario-contato"
-      className="border border-light-gray bg-white p-5 shadow-form sm:p-6 lg:p-7"
+      aria-labelledby="formulario-contato-heading"
+      className="border border-light-gray bg-white p-4 shadow-form sm:p-5 lg:p-6"
     >
-      <div className="mb-6 border-b border-light-gray pb-5">
+      <div className="mb-4 border-b border-light-gray pb-4">
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-gold">
           Contato inicial
         </p>
-        <h2 id="formulario-contato" className="mt-2 text-2xl font-semibold text-navy md:text-3xl">
+        <h2
+          id="formulario-contato-heading"
+          className="mt-2 text-2xl font-semibold text-navy md:text-3xl"
+        >
           Solicitar retorno
         </h2>
         <p className="mt-2 text-sm leading-6 text-graphite-soft">
@@ -162,7 +165,7 @@ export function VisualContactForm() {
 
       <form
         aria-describedby="form-status security-warning"
-        className="space-y-5"
+        className="space-y-4"
         noValidate
         onSubmit={handleSubmit(onSubmit)}
       >
@@ -193,7 +196,7 @@ export function VisualContactForm() {
             placeholder="Seu nome"
             aria-invalid={Boolean(errors.fullName)}
             aria-describedby={errors.fullName ? fieldErrorId("fullName") : undefined}
-            className="mt-2 min-h-12 w-full rounded-sm border border-light-gray px-3.5 text-base transition focus:border-gold disabled:bg-light-gray/40"
+            className="mt-1.5 min-h-12 w-full rounded-sm border border-light-gray px-3.5 text-base transition focus:border-gold disabled:bg-light-gray/40"
             disabled={isSubmitting}
             {...register("fullName")}
           />
@@ -204,7 +207,7 @@ export function VisualContactForm() {
           ) : null}
         </div>
 
-        <div className="grid gap-5 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label htmlFor="phone" className="text-[0.95rem] font-semibold text-navy">
               Telefone ou WhatsApp
@@ -216,7 +219,7 @@ export function VisualContactForm() {
               placeholder="(13) 00000-0000"
               aria-invalid={Boolean(errors.phone)}
               aria-describedby={errors.phone ? fieldErrorId("phone") : undefined}
-              className="mt-2 min-h-12 w-full rounded-sm border border-light-gray px-3.5 text-base transition focus:border-gold disabled:bg-light-gray/40"
+              className="mt-1.5 min-h-12 w-full rounded-sm border border-light-gray px-3.5 text-base transition focus:border-gold disabled:bg-light-gray/40"
               disabled={isSubmitting}
               {...register("phone")}
             />
@@ -238,7 +241,7 @@ export function VisualContactForm() {
               placeholder="Sua cidade"
               aria-invalid={Boolean(errors.city)}
               aria-describedby={errors.city ? fieldErrorId("city") : undefined}
-              className="mt-2 min-h-12 w-full rounded-sm border border-light-gray px-3.5 text-base transition focus:border-gold disabled:bg-light-gray/40"
+              className="mt-1.5 min-h-12 w-full rounded-sm border border-light-gray px-3.5 text-base transition focus:border-gold disabled:bg-light-gray/40"
               disabled={isSubmitting}
               {...register("city")}
             />
@@ -258,7 +261,7 @@ export function VisualContactForm() {
             id="issueCategory"
             aria-invalid={Boolean(errors.issueCategory)}
             aria-describedby={errors.issueCategory ? fieldErrorId("issueCategory") : undefined}
-            className="mt-2 min-h-12 w-full rounded-sm border border-light-gray bg-white px-3.5 text-base transition focus:border-gold disabled:bg-light-gray/40"
+            className="mt-1.5 min-h-12 w-full rounded-sm border border-light-gray bg-white px-3.5 text-base transition focus:border-gold disabled:bg-light-gray/40"
             disabled={isSubmitting}
             {...register("issueCategory")}
           >
@@ -282,7 +285,7 @@ export function VisualContactForm() {
           </label>
           <textarea
             id="description"
-            rows={6}
+            rows={4}
             placeholder="Descreva brevemente o ocorrido."
             aria-invalid={Boolean(errors.description)}
             aria-describedby={
@@ -290,13 +293,13 @@ export function VisualContactForm() {
                 ? `${fieldErrorId("description")} security-warning`
                 : "security-warning"
             }
-            className="mt-2 w-full rounded-sm border border-light-gray px-3.5 py-3 text-base leading-7 transition focus:border-gold disabled:bg-light-gray/40"
+            className="mt-1.5 w-full rounded-sm border border-light-gray px-3.5 py-2.5 text-base leading-7 transition focus:border-gold disabled:bg-light-gray/40"
             disabled={isSubmitting}
             {...register("description")}
           />
           <p
             id="security-warning"
-            className="mt-3 border-l-2 border-gold bg-gold/10 px-3 py-2.5 text-sm leading-6 text-navy"
+            className="mt-2 border-l-2 border-gold bg-gold/10 px-3 py-2 text-sm leading-6 text-navy"
           >
             Descreva brevemente o ocorrido. Não informe senhas, códigos, tokens, números completos
             de conta ou cartão.
@@ -308,7 +311,7 @@ export function VisualContactForm() {
           ) : null}
         </div>
 
-        <label className="flex gap-3 border border-light-gray bg-light-gray/20 p-3 text-sm leading-6 text-graphite-soft">
+        <label className="flex gap-3 border border-light-gray bg-light-gray/20 p-2.5 text-sm leading-6 text-graphite-soft">
           <input
             type="checkbox"
             className="mt-1 h-4 w-4 shrink-0 accent-navy"
@@ -332,7 +335,7 @@ export function VisualContactForm() {
 
         <div
           id="form-status"
-          className={`rounded-sm border p-3 text-sm leading-6 ${statusTone}`}
+          className={`rounded-sm border p-2.5 text-sm leading-6 ${statusTone}`}
           role="status"
           aria-live="polite"
         >
@@ -347,7 +350,7 @@ export function VisualContactForm() {
           {isSubmitting ? "Enviando..." : "Enviar solicitação"}
         </button>
 
-        <div className="grid gap-3 border-t border-light-gray pt-4 sm:grid-cols-2">
+        <div className="grid gap-2.5 border-t border-light-gray pt-3 sm:grid-cols-2">
           <a
             href={siteConfig.whatsappHref}
             className="flex min-h-12 items-center justify-center rounded-sm bg-navy px-5 text-center font-semibold text-white transition hover:bg-navy/92"

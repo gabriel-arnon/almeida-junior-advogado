@@ -4,10 +4,24 @@ export const bankingSituations = [
   "Compras no cartão não reconhecidas",
   "Fraude ou invasão de conta bancária",
   "Cobranças ou descontos indevidos",
-  "Disputas envolvendo cartão de crédito consignado",
+  "Negativação indevida",
+  "Golpes envolvendo boleto ou link falso",
+  "Bloqueio ou encerramento de conta",
   "Juros bancários e discussões contratuais",
   "Financiamento de veículos",
-  "Negativação indevida"
+  "Outros"
+] as const;
+
+export const commonSituationCards = [
+  ...bankingSituations,
+  "Disputas envolvendo cartão de crédito consignado",
+  "Tarifas bancárias questionadas",
+  "Serviços agregados não solicitados",
+  "Renegociação ou acordo com banco",
+  "Contestação de débito automático",
+  "Problemas com portabilidade de crédito",
+  "Cobrança após quitação de contrato",
+  "Limite de crédito ou cheque especial questionado"
 ] as const;
 
 export const serviceSteps = [

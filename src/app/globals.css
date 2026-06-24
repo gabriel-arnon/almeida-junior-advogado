@@ -7,11 +7,16 @@
   --font-serif: Georgia, "Times New Roman", serif;
   --background: #ffffff;
   --foreground: #263238;
+  --sticky-header-height-mobile: 10.625rem;
+  --sticky-header-height-desktop: 7.0625rem;
+  --anchor-visual-gap-mobile: 1.75rem;
+  --anchor-visual-gap-desktop: 3rem;
+  --anchor-offset: calc(var(--sticky-header-height-mobile) + var(--anchor-visual-gap-mobile));
 }
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 8.5rem;
+  scroll-padding-top: var(--anchor-offset);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -67,8 +72,19 @@ summary {
   padding-block: 3.5rem;
 }
 
+.anchor-marker {
+  display: block;
+  height: 0;
+}
+
 @media (min-width: 768px) {
   .section-y {
     padding-block: 4.75rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --anchor-offset: calc(var(--sticky-header-height-desktop) + var(--anchor-visual-gap-desktop));
   }
 }

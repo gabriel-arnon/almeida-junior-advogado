@@ -3,7 +3,6 @@ import { DocumentsSteps } from "@/components/sections/DocumentsSteps";
 import { Faq } from "@/components/sections/Faq";
 import { FinalCta } from "@/components/sections/FinalCta";
 import { Hero } from "@/components/sections/Hero";
-import { LawyerProfile } from "@/components/sections/LawyerProfile";
 import { RegionsOffices } from "@/components/sections/RegionsOffices";
 import { ServiceProcess } from "@/components/sections/ServiceProcess";
 import { faqStructuredData, legalServiceStructuredData } from "@/lib/structured-data";
@@ -20,7 +19,6 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqStructuredData()) }}
       />
       <Hero />
-      <LawyerProfile />
       <CommonSituations />
       <ServiceProcess />
       <DocumentsSteps />

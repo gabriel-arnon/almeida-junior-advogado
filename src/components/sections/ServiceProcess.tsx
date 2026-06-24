@@ -2,9 +2,9 @@ import { serviceSteps } from "@/content/services";
 
 export function ServiceProcess() {
   return (
-    <section id="como-funciona" className="section-y scroll-mt-36 bg-light-gray/30">
+    <section className="section-y bg-light-gray/30">
       <div className="section-shell">
-        <div className="max-w-3xl">
+        <div id="como-funciona" className="max-w-3xl">
           <p className="text-sm font-semibold uppercase tracking-[0.16em] text-gold">
             Como funciona
           </p>

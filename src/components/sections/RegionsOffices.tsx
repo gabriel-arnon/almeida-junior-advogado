@@ -9,11 +9,11 @@ function officeMapsUrl(office: (typeof offices)[number]) {
   return "mapsUrl" in office ? office.mapsUrl : mapsUrl(office.address);
 }
 
-function ExternalLinkIcon() {
+function MapPinIcon() {
   return (
     <svg viewBox="0 0 20 20" className="h-4 w-4" aria-hidden="true">
       <path
-        d="M7 5h8v8M15 5l-9.5 9.5M5 8v7h7"
+        d="M10 18s5-4.9 5-9a5 5 0 0 0-10 0c0 4.1 5 9 5 9Zm0-6.8a2.2 2.2 0 1 0 0-4.4 2.2 2.2 0 0 0 0 4.4Z"
         fill="none"
         stroke="currentColor"
         strokeLinecap="round"
@@ -26,9 +26,9 @@ function ExternalLinkIcon() {
 
 export function RegionsOffices() {
   return (
-    <section id="regioes" className="section-y scroll-mt-36 bg-light-gray/30">
+    <section className="section-y bg-light-gray/30">
       <div className="section-shell">
-        <div className="max-w-3xl">
+        <div id="regioes" className="max-w-3xl">
           <p className="text-sm font-semibold uppercase tracking-[0.16em] text-gold">
             Regiões e escritórios
           </p>
@@ -64,8 +64,8 @@ export function RegionsOffices() {
                   aria-label={`Ver ${office.city} no Google Maps (abre em nova aba)`}
                   className="inline-flex min-h-11 w-fit items-center gap-2 border border-navy px-4 py-2 text-sm font-semibold text-navy transition hover:bg-navy hover:text-white focus-visible:bg-navy focus-visible:text-white"
                 >
+                  <MapPinIcon />
                   Ver no Google Maps
-                  <ExternalLinkIcon />
                 </a>
               </div>
             </address>

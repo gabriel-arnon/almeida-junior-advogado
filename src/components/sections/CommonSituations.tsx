@@ -1,4 +1,5 @@
-import { bankingSituations } from "@/content/services";
+import { VisualContactForm } from "@/components/VisualContactForm";
+import { commonSituationCards } from "@/content/services";
 
 function SituationIcon() {
   return (
@@ -17,29 +18,36 @@ function SituationIcon() {
 
 export function CommonSituations() {
   return (
-    <section id="situacoes" className="section-y scroll-mt-36 bg-white">
-      <div className="section-shell">
-        <div className="max-w-3xl">
-          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-gold">
-            Situações comuns
-          </p>
-          <h2 className="mt-3 text-3xl font-semibold text-navy md:text-4xl">
-            Conflitos bancários que exigem análise individual
-          </h2>
+    <section className="section-y bg-white">
+      <div className="section-shell grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(25rem,0.78fr)] lg:items-start xl:grid-cols-[minmax(0,1fr)_28rem]">
+        <div>
+          <div id="situacoes" className="max-w-3xl">
+            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-gold">
+              Situações comuns
+            </p>
+            <h2 className="mt-3 text-3xl font-semibold text-navy md:text-4xl">
+              Conflitos bancários que exigem análise individual
+            </h2>
+          </div>
+          <ul className="mt-8 grid items-stretch gap-3 sm:grid-cols-2 lg:gap-4">
+            {commonSituationCards.map((item) => (
+              <li
+                key={item}
+                tabIndex={0}
+                className="flex min-h-20 gap-3 border border-light-gray bg-white p-3.5 text-sm font-semibold leading-6 text-graphite transition duration-150 hover:border-gold/70 hover:bg-gold/5 hover:shadow-[0_8px_22px_rgba(1,39,61,0.06)] focus-visible:border-gold focus-visible:bg-gold/5"
+              >
+                <span className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-full bg-gold/10">
+                  <SituationIcon />
+                </span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
         </div>
-        <ul className="mt-8 grid items-stretch gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {bankingSituations.map((item) => (
-            <li
-              key={item}
-              className="flex min-h-28 gap-3 border border-light-gray bg-white p-4 text-sm font-semibold leading-6 text-graphite transition hover:border-gold/55"
-            >
-              <span className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-full bg-gold/10">
-                <SituationIcon />
-              </span>
-              <span>{item}</span>
-            </li>
-          ))}
-        </ul>
+        <div className="lg:sticky lg:top-[9.5rem]">
+          <span id="formulario-contato" className="anchor-marker" aria-hidden="true" />
+          <VisualContactForm />
+        </div>
       </div>
     </section>
   );
