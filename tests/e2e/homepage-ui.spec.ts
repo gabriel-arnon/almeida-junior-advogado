@@ -20,6 +20,17 @@ async function expectAnchorGap(page: Page, selector: string, minGap = 24, maxGap
   expect(metrics.targetTop).toBeLessThanOrEqual(metrics.headerBottom + maxGap);
 }
 
+async function openMobileMenu(page: Page) {
+  const menuButton = page.getByRole("button", { name: "Abrir menu de navegação" });
+
+  await menuButton.click();
+  await expect(page.getByRole("button", { name: "Fechar menu de navegação" })).toHaveAttribute(
+    "aria-expanded",
+    "true"
+  );
+  await expect(page.getByRole("navigation", { name: "Navegação principal mobile" })).toBeVisible();
+}
+
 test("homepage integrates profile into the introductory section before situations and form", async ({ page }) => {
   await page.goto("/");
 
@@ -51,11 +62,19 @@ test("homepage integrates profile into the introductory section before situation
   expect(order.situationsTop).toBeLessThanOrEqual(order.formTop);
 });
 
+test("desktop navigation remains visible at desktop width", async ({ page }) => {
+  await page.setViewportSize({ width: 1366, height: 768 });
+  await page.goto("/");
+
+  await expect(page.getByRole("navigation", { name: "Navegação principal", exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: /menu de navegação/ })).toHaveCount(0);
+});
+
 test("homepage anchors align below the sticky header", async ({ page }) => {
   await page.setViewportSize({ width: 1366, height: 768 });
   await page.goto("/");
 
-  const nav = page.getByRole("navigation", { name: "Navegação principal" });
+  const nav = page.getByRole("navigation", { name: "Navegação principal", exact: true });
   const anchors = [
     { name: "Perfil", hash: "perfil", visibleSelector: "#perfil" },
     { name: "Situações", hash: "situacoes", visibleSelector: "#situacoes" },
@@ -72,12 +91,172 @@ test("homepage anchors align below the sticky header", async ({ page }) => {
   }
 });
 
+test("desktop situations section shows 20 cards", async ({ page }) => {
+  await page.setViewportSize({ width: 1366, height: 768 });
+  await page.goto("/");
+
+  await expect(page.locator('[data-situation-list="desktop"] > li')).toHaveCount(20);
+});
+
+test("mobile menu replaces horizontal navigation and supports open close interactions", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+
+  await expect(page.getByRole("navigation", { name: "Navegação principal", exact: true })).toBeHidden();
+
+  const menuButton = page.getByRole("button", { name: "Abrir menu de navegação" });
+  await expect(menuButton).toBeVisible();
+  await expect(menuButton).toHaveAttribute("aria-expanded", "false");
+  await expect(menuButton).toHaveAttribute("aria-controls", "mobile-navigation");
+
+  await menuButton.click();
+  await expect(page.getByRole("navigation", { name: "Navegação principal mobile" })).toBeVisible();
+  await expect(page.locator("body")).toHaveCSS("overflow", "hidden");
+
+  await page.getByRole("button", { name: "Fechar menu de navegação" }).click();
+  await expect(menuButton).toHaveAttribute("aria-expanded", "false");
+
+  await openMobileMenu(page);
+  await page.keyboard.press("Escape");
+  await expect(menuButton).toHaveAttribute("aria-expanded", "false");
+});
+
+test("mobile menu closes after selecting a navigation link", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+
+  await openMobileMenu(page);
+  await page
+    .getByRole("navigation", { name: "Navegação principal mobile" })
+    .getByRole("link", { name: "Situações" })
+    .click();
+
+  await expect(page).toHaveURL(/#situacoes$/);
+  await expect(page.getByRole("button", { name: "Abrir menu de navegação" })).toHaveAttribute(
+    "aria-expanded",
+    "false"
+  );
+});
+
+test("mobile menu links remain visually readable after opening from lower sections", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+
+  const sectionTargets = ["#situacoes", "#como-funciona", "#documentos", "#regioes", "#faq"];
+  const expectedLinks = [
+    { label: "Perfil", color: /rgba?\(255,\s*255,\s*255/ },
+    { label: "Situações", color: /rgba?\(255,\s*255,\s*255/ },
+    { label: "Atendimento", color: /rgba?\(255,\s*255,\s*255/ },
+    { label: "Preparação", color: /rgba?\(255,\s*255,\s*255/ },
+    { label: "Escritórios", color: /rgba?\(255,\s*255,\s*255/ },
+    { label: "FAQ", color: /rgba?\(255,\s*255,\s*255/ },
+    { label: "Solicitar contato", color: /^rgb\(1,\s*39,\s*61\)$/ }
+  ];
+
+  for (const target of sectionTargets) {
+    await page.locator(target).scrollIntoViewIfNeeded();
+    await expect(page.locator(target)).toBeInViewport();
+
+    await openMobileMenu(page);
+
+    const menu = page.getByRole("navigation", { name: "Navegação principal mobile" });
+    await expect(menu).toHaveCSS("background-color", "rgb(1, 39, 61)");
+
+    for (const { label, color } of expectedLinks) {
+      const link = menu.getByRole("link", { name: label });
+      await expect(link).toBeVisible();
+
+      const readability = await link.evaluate((element) => {
+        const rect = element.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const topElement = document.elementFromPoint(centerX, centerY);
+        const linkStyle = window.getComputedStyle(element);
+        const menuStyle = window.getComputedStyle(element.closest("nav") as Element);
+
+        return {
+          color: linkStyle.color,
+          opacity: linkStyle.opacity,
+          menuBackground: menuStyle.backgroundColor,
+          isTopElementLink: element.contains(topElement)
+        };
+      });
+
+      expect(readability.color).toMatch(color);
+      expect(readability.opacity).toBe("1");
+      expect(readability.menuBackground).toBe("rgb(1, 39, 61)");
+      expect(readability.isTopElementLink).toBe(true);
+    }
+
+    await page.keyboard.press("Escape");
+    await expect(page.getByRole("button", { name: "Abrir menu de navegação" })).toHaveAttribute(
+      "aria-expanded",
+      "false"
+    );
+  }
+});
+
+test("mobile anchors align below the sticky header from the menu", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+
+  const anchors = [
+    { name: "Perfil", hash: "perfil", visibleSelector: "#perfil" },
+    { name: "Situações", hash: "situacoes", visibleSelector: "#situacoes" },
+    { name: "Atendimento", hash: "como-funciona", visibleSelector: "#como-funciona" },
+    { name: "Preparação", hash: "documentos", visibleSelector: "#documentos" },
+    { name: "Escritórios", hash: "regioes", visibleSelector: "#regioes" },
+    { name: "FAQ", hash: "faq", visibleSelector: "#faq" },
+    { name: "Solicitar contato", hash: "formulario-contato", visibleSelector: "#formulario-contato" }
+  ];
+
+  for (const anchor of anchors) {
+    await openMobileMenu(page);
+    await page
+      .getByRole("navigation", { name: "Navegação principal mobile" })
+      .getByRole("link", { name: anchor.name })
+      .click();
+    await expect(page).toHaveURL(new RegExp(`#${anchor.hash}$`));
+    await expectAnchorGap(page, anchor.visibleSelector, 20, 84);
+  }
+});
+
+test("mobile situations show six cards first and reveal the remaining cards", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+
+  await expect(page.locator('[data-situation-list="mobile-primary"] > li')).toHaveCount(6);
+  await expect(page.locator('[data-situation-list="mobile-additional"] > li')).toHaveCount(14);
+  await expect(page.locator("#outras-situacoes")).toHaveAttribute("aria-hidden", "true");
+
+  const toggle = page.getByRole("button", { name: "Ver outras situações" });
+  await expect(toggle).toHaveAttribute("aria-expanded", "false");
+
+  await toggle.click();
+  await expect(page.getByRole("button", { name: "Ocultar outras situações" })).toHaveAttribute(
+    "aria-expanded",
+    "true"
+  );
+  await expect(page.locator("#outras-situacoes")).toHaveAttribute("aria-hidden", "false");
+
+  await page.getByRole("button", { name: "Ocultar outras situações" }).click();
+  await expect(page.getByRole("button", { name: "Ver outras situações" })).toHaveAttribute(
+    "aria-expanded",
+    "false"
+  );
+  await expect(page.locator("#outras-situacoes")).toHaveAttribute("aria-hidden", "true");
+});
+
 test("internal page profile link returns to a visible homepage anchor", async ({ page }) => {
   await page.setViewportSize({ width: 1366, height: 768 });
   await page.goto("/aviso-legal");
 
   await page
-    .getByRole("navigation", { name: "Navegação principal" })
+    .getByRole("navigation", { name: "Navegação principal", exact: true })
     .getByRole("link", { name: "Perfil" })
     .click();
 
@@ -179,14 +358,43 @@ test("FAQ question rows expose expanded state and toggle by keyboard", async ({ 
 });
 
 test("mobile homepage has no horizontal overflow", async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/");
+  const viewports = [
+    { width: 320, height: 568 },
+    { width: 360, height: 800 },
+    { width: 390, height: 844 },
+    { width: 412, height: 915 }
+  ];
 
-  const metrics = await page.evaluate(() => ({
-    body: document.body.scrollWidth,
-    document: document.documentElement.scrollWidth,
-    viewport: window.innerWidth
-  }));
+  for (const viewport of viewports) {
+    await page.setViewportSize(viewport);
+    await page.goto("/");
 
-  expect(Math.max(metrics.body, metrics.document)).toBeLessThanOrEqual(metrics.viewport + 1);
+    const metrics = await page.evaluate(() => ({
+      body: document.body.scrollWidth,
+      document: document.documentElement.scrollWidth,
+      viewport: window.innerWidth
+    }));
+
+    expect(Math.max(metrics.body, metrics.document)).toBeLessThanOrEqual(metrics.viewport + 1);
+    await expect(page.getByText("Almeida Junior Advogado").first()).toBeVisible();
+    await expect(page.getByRole("button", { name: "Abrir menu de navegação" })).toBeVisible();
+
+    await openMobileMenu(page);
+
+    const menuMetrics = await page.locator("#mobile-navigation").evaluate((menu) => {
+      const rect = menu.getBoundingClientRect();
+
+      return {
+        bottom: rect.bottom,
+        viewportHeight: window.innerHeight,
+        scrollHeight: menu.scrollHeight,
+        clientHeight: menu.clientHeight
+      };
+    });
+
+    expect(menuMetrics.bottom).toBeLessThanOrEqual(menuMetrics.viewportHeight + 1);
+    expect(menuMetrics.clientHeight).toBeLessThanOrEqual(menuMetrics.viewportHeight);
+
+    await page.keyboard.press("Escape");
+  }
 });

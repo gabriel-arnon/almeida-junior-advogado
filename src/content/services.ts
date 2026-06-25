@@ -21,7 +21,8 @@ export const commonSituationCards = [
   "Contestação de débito automático",
   "Problemas com portabilidade de crédito",
   "Cobrança após quitação de contrato",
-  "Limite de crédito ou cheque especial questionado"
+  "Limite de crédito ou cheque especial questionado",
+  "Contestação de operações em conta digital"
 ] as const;
 
 export const serviceSteps = [

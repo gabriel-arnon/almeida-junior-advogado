@@ -7,7 +7,7 @@
   --font-serif: Georgia, "Times New Roman", serif;
   --background: #ffffff;
   --foreground: #263238;
-  --sticky-header-height-mobile: 10.625rem;
+  --sticky-header-height-mobile: 7.25rem;
   --sticky-header-height-desktop: 7.0625rem;
   --anchor-visual-gap-mobile: 1.75rem;
   --anchor-visual-gap-desktop: 3rem;
@@ -63,6 +63,10 @@ summary {
 }
 
 @media (min-width: 768px) {
+  :root {
+    --sticky-header-height-mobile: 10.625rem;
+  }
+
   .section-shell {
     padding-inline: 2rem;
   }
