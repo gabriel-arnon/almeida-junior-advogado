@@ -1,7 +1,43 @@
 import { expect, type Page, test } from "@playwright/test";
 
+async function waitForBodyScrollUnlock(page: Page) {
+  await page.waitForFunction(() => document.body.style.overflow !== "hidden");
+}
+
+async function waitForScrollToSettle(page: Page) {
+  await page.waitForFunction(
+    () => {
+      const key = "__scrollSettleState";
+      const currentScrollY = window.scrollY;
+      const now = performance.now();
+      const store = window as typeof window & {
+        [key]?: { scrollY: number; stableSince: number };
+      };
+      const previous = store[key];
+
+      if (!previous || Math.abs(previous.scrollY - currentScrollY) >= 1) {
+        store[key] = { scrollY: currentScrollY, stableSince: now };
+        return false;
+      }
+
+      return now - previous.stableSince >= 120;
+    },
+    undefined,
+    { timeout: 2500 }
+  );
+}
+
+async function waitForMobileMenuClosed(page: Page) {
+  await expect(page.locator("#mobile-navigation")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Abrir menu de navegação" })).toHaveAttribute(
+    "aria-expanded",
+    "false"
+  );
+  await waitForBodyScrollUnlock(page);
+}
+
 async function expectAnchorGap(page: Page, selector: string, minGap = 24, maxGap = 80) {
-  await page.waitForTimeout(900);
+  await waitForScrollToSettle(page);
 
   const metrics = await page.evaluate((targetSelector) => {
     const header = document.querySelector("header");
@@ -28,8 +64,28 @@ async function openMobileMenu(page: Page) {
     "aria-expanded",
     "true"
   );
-  await expect(page.getByRole("navigation", { name: "Navegação principal mobile" })).toBeVisible();
+  await expect(page.locator("#mobile-navigation")).toBeVisible();
+  await page.waitForFunction(() => document.body.style.overflow === "hidden");
 }
+
+const desktopAnchors = [
+  { hash: "perfil", visibleSelector: "#perfil" },
+  { hash: "situacoes", visibleSelector: "#situacoes" },
+  { hash: "como-funciona", visibleSelector: "#como-funciona" },
+  { hash: "documentos", visibleSelector: "#documentos" },
+  { hash: "regioes", visibleSelector: "#regioes" },
+  { hash: "faq", visibleSelector: "#faq" }
+];
+
+const mobileMenuAnchors = [
+  { name: "Perfil", hash: "perfil", visibleSelector: "#perfil" },
+  { name: "Situações", hash: "situacoes", visibleSelector: "#situacoes" },
+  { name: "Atendimento", hash: "como-funciona", visibleSelector: "#como-funciona" },
+  { name: "Preparação", hash: "documentos", visibleSelector: "#documentos" },
+  { name: "Escritórios", hash: "regioes", visibleSelector: "#regioes" },
+  { name: "FAQ", hash: "faq", visibleSelector: "#faq" },
+  { name: "Solicitar contato", hash: "formulario-contato", visibleSelector: "#formulario-contato" }
+];
 
 test("homepage integrates profile into the introductory section before situations and form", async ({ page }) => {
   await page.goto("/");
@@ -70,26 +126,21 @@ test("desktop navigation remains visible at desktop width", async ({ page }) => 
   await expect(page.getByRole("button", { name: /menu de navegação/ })).toHaveCount(0);
 });
 
-test("homepage anchors align below the sticky header", async ({ page }) => {
-  await page.setViewportSize({ width: 1366, height: 768 });
-  await page.goto("/");
+for (const anchor of desktopAnchors) {
+  test(`desktop anchor #${anchor.hash} aligns below the sticky header`, async ({ page }) => {
+    await page.setViewportSize({ width: 1366, height: 768 });
+    await page.goto("/");
+    await waitForScrollToSettle(page);
 
-  const nav = page.getByRole("navigation", { name: "Navegação principal", exact: true });
-  const anchors = [
-    { name: "Perfil", hash: "perfil", visibleSelector: "#perfil" },
-    { name: "Situações", hash: "situacoes", visibleSelector: "#situacoes" },
-    { name: "Atendimento", hash: "como-funciona", visibleSelector: "#como-funciona" },
-    { name: "Preparação", hash: "documentos", visibleSelector: "#documentos" },
-    { name: "Escritórios", hash: "regioes", visibleSelector: "#regioes" },
-    { name: "FAQ", hash: "faq", visibleSelector: "#faq" }
-  ];
+    const nav = page.getByRole("navigation", { name: "Navegação principal", exact: true });
+    const link = nav.locator(`a[href="/#${anchor.hash}"]`);
 
-  for (const anchor of anchors) {
-    await nav.getByRole("link", { name: anchor.name }).click();
+    await expect(link).toBeVisible();
+    await link.click();
     await expect(page).toHaveURL(new RegExp(`#${anchor.hash}$`));
     await expectAnchorGap(page, anchor.visibleSelector);
-  }
-});
+  });
+}
 
 test("desktop situations section shows 20 cards", async ({ page }) => {
   await page.setViewportSize({ width: 1366, height: 768 });
@@ -112,15 +163,15 @@ test("mobile menu replaces horizontal navigation and supports open close interac
   await expect(menuButton).toHaveAttribute("aria-controls", "mobile-navigation");
 
   await menuButton.click();
-  await expect(page.getByRole("navigation", { name: "Navegação principal mobile" })).toBeVisible();
-  await expect(page.locator("body")).toHaveCSS("overflow", "hidden");
+  await expect(page.locator("#mobile-navigation")).toBeVisible();
+  await page.waitForFunction(() => document.body.style.overflow === "hidden");
 
   await page.getByRole("button", { name: "Fechar menu de navegação" }).click();
-  await expect(menuButton).toHaveAttribute("aria-expanded", "false");
+  await waitForMobileMenuClosed(page);
 
   await openMobileMenu(page);
   await page.keyboard.press("Escape");
-  await expect(menuButton).toHaveAttribute("aria-expanded", "false");
+  await waitForMobileMenuClosed(page);
 });
 
 test("mobile menu closes after selecting a navigation link", async ({ page }) => {
@@ -134,10 +185,7 @@ test("mobile menu closes after selecting a navigation link", async ({ page }) =>
     .click();
 
   await expect(page).toHaveURL(/#situacoes$/);
-  await expect(page.getByRole("button", { name: "Abrir menu de navegação" })).toHaveAttribute(
-    "aria-expanded",
-    "false"
-  );
+  await waitForMobileMenuClosed(page);
 });
 
 test("mobile menu links remain visually readable after opening from lower sections", async ({
@@ -193,37 +241,27 @@ test("mobile menu links remain visually readable after opening from lower sectio
     }
 
     await page.keyboard.press("Escape");
-    await expect(page.getByRole("button", { name: "Abrir menu de navegação" })).toHaveAttribute(
-      "aria-expanded",
-      "false"
-    );
+    await waitForMobileMenuClosed(page);
   }
 });
 
-test("mobile anchors align below the sticky header from the menu", async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/");
+for (const anchor of mobileMenuAnchors) {
+  test(`mobile menu anchor #${anchor.hash} aligns below the sticky header`, async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/");
+    await page.locator("#documentos").scrollIntoViewIfNeeded();
+    await waitForScrollToSettle(page);
 
-  const anchors = [
-    { name: "Perfil", hash: "perfil", visibleSelector: "#perfil" },
-    { name: "Situações", hash: "situacoes", visibleSelector: "#situacoes" },
-    { name: "Atendimento", hash: "como-funciona", visibleSelector: "#como-funciona" },
-    { name: "Preparação", hash: "documentos", visibleSelector: "#documentos" },
-    { name: "Escritórios", hash: "regioes", visibleSelector: "#regioes" },
-    { name: "FAQ", hash: "faq", visibleSelector: "#faq" },
-    { name: "Solicitar contato", hash: "formulario-contato", visibleSelector: "#formulario-contato" }
-  ];
-
-  for (const anchor of anchors) {
     await openMobileMenu(page);
     await page
       .getByRole("navigation", { name: "Navegação principal mobile" })
       .getByRole("link", { name: anchor.name })
       .click();
+    await waitForMobileMenuClosed(page);
     await expect(page).toHaveURL(new RegExp(`#${anchor.hash}$`));
     await expectAnchorGap(page, anchor.visibleSelector, 20, 84);
-  }
-});
+  });
+}
 
 test("mobile situations show six cards first and reveal the remaining cards", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
@@ -396,5 +434,6 @@ test("mobile homepage has no horizontal overflow", async ({ page }) => {
     expect(menuMetrics.clientHeight).toBeLessThanOrEqual(menuMetrics.viewportHeight);
 
     await page.keyboard.press("Escape");
+    await waitForMobileMenuClosed(page);
   }
 });

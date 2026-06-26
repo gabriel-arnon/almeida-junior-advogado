@@ -14,6 +14,47 @@ async function fillValidContactForm(page: Page) {
   await page.getByLabel("Declaro que li o aviso de privacidade").check();
 }
 
+async function openMobileMenu(page: Page) {
+  await page.getByRole("button", { name: "Abrir menu de navegação" }).click();
+  await expect(page.locator("#mobile-navigation")).toBeVisible();
+}
+
+async function expectFaqAnchorBelowHeader(page: Page) {
+  await page.waitForFunction(() => document.body.style.overflow !== "hidden");
+  await page.waitForFunction(
+    () => {
+      const key = "__scrollSettleState";
+      const currentScrollY = window.scrollY;
+      const now = performance.now();
+      const store = window as typeof window & {
+        [key]?: { scrollY: number; stableSince: number };
+      };
+      const previous = store[key];
+
+      if (!previous || Math.abs(previous.scrollY - currentScrollY) >= 1) {
+        store[key] = { scrollY: currentScrollY, stableSince: now };
+        return false;
+      }
+
+      return now - previous.stableSince >= 120;
+    },
+    undefined,
+    { timeout: 2500 }
+  );
+
+  const gap = await page.evaluate(() => {
+    const header = document.querySelector("header");
+    const faq = document.querySelector("#faq");
+    const headerBottom = header?.getBoundingClientRect().bottom ?? 0;
+    const faqTop = faq?.getBoundingClientRect().top ?? 0;
+
+    return faqTop - headerBottom;
+  });
+
+  expect(gap).toBeGreaterThanOrEqual(20);
+  expect(gap).toBeLessThanOrEqual(84);
+}
+
 test("homepage renders required static sections", async ({ page }) => {
   await page.goto("/");
 
@@ -52,10 +93,27 @@ test("lawyer profile renders the professional portrait", async ({ page }) => {
 });
 
 test("anchor navigation reaches expected homepage sections", async ({ page }) => {
+  await page.setViewportSize({ width: 1366, height: 768 });
   await page.goto("/");
-  await page.getByRole("link", { name: "FAQ" }).click();
+
+  await page
+    .getByRole("navigation", { name: "Navegação principal", exact: true })
+    .locator('a[href="/#faq"]')
+    .click();
   await expect(page).toHaveURL(/#faq$/);
-  await expect(page.locator("#faq")).toBeInViewport();
+  await expectFaqAnchorBelowHeader(page);
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+
+  await openMobileMenu(page);
+  await page
+    .getByRole("navigation", { name: "Navegação principal mobile" })
+    .getByRole("link", { name: "FAQ" })
+    .click();
+  await expect(page.locator("#mobile-navigation")).toHaveCount(0);
+  await expect(page).toHaveURL(/#faq$/);
+  await expectFaqAnchorBelowHeader(page);
 });
 
 test("desktop header exposes restrained contact CTA", async ({ page }) => {
@@ -73,8 +131,13 @@ test("mobile navigation remains compact and usable", async ({ page }) => {
 
   const header = page.locator("header");
   await expect(header.getByLabel("Almeida Junior Advogado - página inicial")).toBeVisible();
-  await expect(header.getByRole("navigation", { name: "Navegação principal" })).toBeVisible();
-  await expect(header.getByRole("link", { name: "FAQ" })).toBeVisible();
+  await expect(header.getByRole("navigation", { name: "Navegação principal", exact: true })).toBeHidden();
+  await openMobileMenu(page);
+  await expect(
+    page
+      .getByRole("navigation", { name: "Navegação principal mobile" })
+      .getByRole("link", { name: "FAQ" })
+  ).toBeVisible();
 });
 
 test("contact form shows validation for required fields", async ({ page }) => {
