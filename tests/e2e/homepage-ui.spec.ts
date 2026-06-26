@@ -27,6 +27,35 @@ async function waitForScrollToSettle(page: Page) {
   );
 }
 
+async function waitForTargetTopToSettle(page: Page, selector: string) {
+  await page.waitForFunction(
+    (targetSelector) => {
+      const target = document.querySelector(targetSelector);
+
+      if (!target) {
+        return false;
+      }
+
+      const key = `__targetTopSettleState:${targetSelector}`;
+      const currentTop = target.getBoundingClientRect().top;
+      const now = performance.now();
+      const store = window as typeof window & {
+        [key]?: { top: number; stableSince: number };
+      };
+      const previous = store[key];
+
+      if (!previous || Math.abs(previous.top - currentTop) >= 1) {
+        store[key] = { top: currentTop, stableSince: now };
+        return false;
+      }
+
+      return now - previous.stableSince >= 120;
+    },
+    selector,
+    { timeout: 2500 }
+  );
+}
+
 async function waitForMobileMenuClosed(page: Page) {
   await expect(page.locator("#mobile-navigation")).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Abrir menu de navegação" })).toHaveAttribute(
@@ -37,7 +66,7 @@ async function waitForMobileMenuClosed(page: Page) {
 }
 
 async function expectAnchorGap(page: Page, selector: string, minGap = 24, maxGap = 80) {
-  await waitForScrollToSettle(page);
+  await waitForTargetTopToSettle(page, selector);
 
   const metrics = await page.evaluate((targetSelector) => {
     const header = document.querySelector("header");
@@ -128,11 +157,12 @@ test("desktop navigation remains visible at desktop width", async ({ page }) => 
 
 for (const anchor of desktopAnchors) {
   test(`desktop anchor #${anchor.hash} aligns below the sticky header`, async ({ page }) => {
-    await page.setViewportSize({ width: 1366, height: 768 });
+    await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto("/");
-    await waitForScrollToSettle(page);
 
     const nav = page.getByRole("navigation", { name: "Navegação principal", exact: true });
+    await expect(nav).toBeVisible();
+
     const link = nav.locator(`a[href="/#${anchor.hash}"]`);
 
     await expect(link).toBeVisible();
