@@ -4,7 +4,7 @@ test("privacy policy route loads", async ({ page }) => {
   await page.goto("/politica-de-privacidade");
 
   await expect(page.getByRole("heading", { level: 1, name: "Política de Privacidade" })).toBeVisible();
-  await expect(page.getByText("Última atualização: 23 de junho de 2026")).toBeVisible();
+  await expect(page.getByText("Última atualização: 25 de julho de 2026")).toBeVisible();
   await expect(page.getByRole("heading", { level: 2, name: "1. Identificação do responsável pelo tratamento" })).toBeVisible();
   await expect(page.getByRole("link", { name: "Voltar para a página inicial" }).first()).toHaveAttribute(
     "href",
@@ -16,7 +16,7 @@ test("legal notice route loads", async ({ page }) => {
   await page.goto("/aviso-legal");
 
   await expect(page.getByRole("heading", { level: 1, name: "Aviso Legal" })).toBeVisible();
-  await expect(page.getByText("Última atualização: 23 de junho de 2026")).toBeVisible();
+  await expect(page.getByText("Última atualização: 25 de julho de 2026")).toBeVisible();
   await expect(page.getByRole("heading", { level: 2, name: "4. Ausência de garantia de resultado" })).toBeVisible();
   await expect(page.getByRole("link", { name: "Voltar para a página inicial" }).first()).toHaveAttribute(
     "href",

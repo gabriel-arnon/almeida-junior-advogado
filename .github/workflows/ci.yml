@@ -45,8 +45,11 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Playwright tests
-        run: npx playwright test
+      - name: Playwright desktop tests
+        run: npx playwright test --project=chromium
+
+      - name: Playwright mobile tests
+        run: npx playwright test --project=mobile-chrome
 
       - name: Upload Playwright report
         if: failure()

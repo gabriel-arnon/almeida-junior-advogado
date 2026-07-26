@@ -21,7 +21,7 @@ export function MotionProvider() {
     ];
 
     media.add("(prefers-reduced-motion: reduce)", () => {
-      gsap.set(allAnimatedElements, { clearProps: "all", autoAlpha: 1 });
+      gsap.set(allAnimatedElements, { clearProps: "all", opacity: 1 });
       gsap.set("[data-process-progress]", { scaleX: 1 });
     });
 
@@ -35,23 +35,23 @@ export function MotionProvider() {
       heroTimeline
         .fromTo(
           heroItems,
-          { autoAlpha: 0, y: 28 },
-          { autoAlpha: 1, y: 0, duration: 0.8, stagger: 0.09, clearProps: "transform" }
+          { opacity: 0, y: 28 },
+          { opacity: 1, y: 0, duration: 0.8, stagger: 0.09, clearProps: "transform" }
         )
         .fromTo(
           portrait,
-          { autoAlpha: 0, x: 36, rotate: 1.5 },
-          { autoAlpha: 1, x: 0, rotate: 0, duration: 0.9, clearProps: "transform" },
+          { opacity: 0, x: 36, rotate: 1.5 },
+          { opacity: 1, x: 0, rotate: 0, duration: 0.9, clearProps: "transform" },
           0.18
         );
 
-      gsap.set(revealElements, { autoAlpha: 0, y: 24 });
+      gsap.set(revealElements, { opacity: 0, y: 24 });
       ScrollTrigger.batch(revealElements, {
         start: "top 88%",
         once: true,
         onEnter: (batch) =>
           gsap.to(batch, {
-            autoAlpha: 1,
+            opacity: 1,
             y: 0,
             duration: 0.7,
             stagger: 0.08,
@@ -63,10 +63,10 @@ export function MotionProvider() {
 
       groupElements.forEach((group) => {
         const items = gsap.utils.toArray<HTMLElement>("[data-reveal-item]", group);
-        gsap.set(items, { autoAlpha: 0, y: 22 });
+        gsap.set(items, { opacity: 0, y: 22 });
 
         gsap.to(items, {
-          autoAlpha: 1,
+          opacity: 1,
           y: 0,
           duration: 0.65,
           stagger: 0.08,
