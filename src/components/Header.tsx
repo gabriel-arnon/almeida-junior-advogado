@@ -99,7 +99,7 @@ export function Header() {
   return (
     <header
       ref={headerRef}
-      className="sticky top-0 z-50 border-b border-gold/25 bg-navy text-white backdrop-blur supports-[backdrop-filter]:bg-navy/96"
+      className="sticky top-0 z-50 border-b border-gold/20 bg-navy text-white shadow-[0_8px_30px_rgba(1,39,61,0.12)] backdrop-blur supports-[backdrop-filter]:bg-navy/96"
     >
       <div className="section-shell relative flex min-h-20 flex-col gap-4 py-3 md:min-h-24 md:py-4 lg:min-h-28 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex items-center justify-between gap-4">
@@ -111,7 +111,7 @@ export function Header() {
           </div>
           <button
             type="button"
-            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-sm border border-gold/55 text-white transition duration-150 hover:bg-white/10 focus-visible:border-white focus-visible:bg-white focus-visible:text-navy md:hidden"
+            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-gold/55 text-white transition duration-300 hover:rotate-3 hover:bg-white/10 focus-visible:border-white focus-visible:bg-white focus-visible:text-navy md:hidden"
             aria-label={isMobileMenuOpen ? "Fechar menu de navegação" : "Abrir menu de navegação"}
             aria-expanded={isMobileMenuOpen}
             aria-controls={mobileMenuId}
@@ -121,7 +121,7 @@ export function Header() {
           </button>
           <Link
             href="/#formulario-contato"
-            className="hidden min-h-11 items-center justify-center rounded-sm border border-gold bg-gold px-4 text-sm font-semibold text-navy transition hover:bg-white hover:text-navy focus-visible:bg-white focus-visible:text-navy md:flex lg:hidden"
+            className="hidden min-h-11 items-center justify-center rounded-full border border-gold bg-gold px-5 text-sm font-semibold text-navy transition duration-300 hover:-translate-y-0.5 hover:bg-white hover:text-navy focus-visible:bg-white focus-visible:text-navy md:flex lg:hidden"
           >
             Solicitar contato
           </Link>
@@ -136,7 +136,7 @@ export function Header() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="block min-h-11 rounded-sm border-b-2 border-transparent px-3 py-3 transition duration-150 hover:border-gold hover:bg-white/10 hover:text-white focus-visible:border-white focus-visible:bg-white focus-visible:text-navy lg:px-3.5"
+                    className="block min-h-11 rounded-full border border-transparent px-3 py-3 transition duration-300 hover:border-white/10 hover:bg-white/10 hover:text-white focus-visible:border-white focus-visible:bg-white focus-visible:text-navy lg:px-3.5"
                   >
                     {item.label}
                   </Link>
@@ -146,7 +146,7 @@ export function Header() {
           </nav>
           <Link
             href="/#formulario-contato"
-            className="hidden min-h-12 shrink-0 items-center justify-center rounded-sm bg-gold px-5 text-sm font-semibold text-navy transition hover:bg-white focus-visible:bg-white lg:flex"
+            className="hidden min-h-12 shrink-0 items-center justify-center rounded-full bg-gold px-6 text-sm font-semibold text-navy shadow-[0_8px_22px_rgba(0,0,0,0.12)] transition duration-300 hover:-translate-y-0.5 hover:bg-white focus-visible:bg-white lg:flex"
           >
             Solicitar contato
           </Link>
@@ -162,7 +162,7 @@ export function Header() {
             <nav
               id={mobileMenuId}
               aria-label="Navegação principal mobile"
-              className="fixed inset-x-4 top-[calc(var(--sticky-header-height-mobile)_-_0.25rem)] z-50 max-h-[calc(100dvh_-_var(--sticky-header-height-mobile)_+_0.25rem)] overflow-hidden border border-gold/25 bg-navy opacity-100 shadow-[0_20px_40px_rgba(1,39,61,0.24)] transition-[opacity,transform] duration-200 md:hidden"
+              className="fixed inset-x-4 top-[calc(var(--sticky-header-height-mobile)_-_0.25rem)] z-50 max-h-[calc(100dvh_-_var(--sticky-header-height-mobile)_+_0.25rem)] overflow-hidden rounded-2xl border border-gold/25 bg-navy opacity-100 shadow-[0_20px_40px_rgba(1,39,61,0.24)] transition-[opacity,transform] duration-300 md:hidden"
             >
               <div className="max-h-[calc(100dvh_-_var(--sticky-header-height-mobile)_+_0.25rem)] overflow-y-auto p-2">
                 <ul className="grid gap-1 text-base font-semibold text-white/88">

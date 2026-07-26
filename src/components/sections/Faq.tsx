@@ -21,30 +21,30 @@ export function Faq() {
   return (
     <section className="section-y bg-white">
       <div id="faq" className="section-shell max-w-4xl">
-        <p className="text-sm font-semibold uppercase tracking-[0.16em] text-gold">
+        <p className="section-kicker text-gold" data-reveal>
           Perguntas frequentes
         </p>
-        <h2 className="mt-3 text-3xl font-semibold text-navy md:text-4xl">
+        <h2 className="mt-3 text-4xl font-semibold leading-tight text-navy md:text-5xl" data-reveal>
           Respostas objetivas para o primeiro contato
         </h2>
-        <div className="mt-8 divide-y divide-light-gray border-y border-light-gray">
+        <div className="mt-8 overflow-hidden rounded-2xl border border-light-gray bg-white shadow-[0_18px_50px_rgba(1,39,61,0.06)]" data-reveal>
           {faqItems.map((item, index) => {
             const isOpen = openQuestions.has(index);
             const answerId = `faq-answer-${index}`;
 
             return (
-              <div key={item.question}>
+              <div key={item.question} className="border-b border-light-gray last:border-b-0">
                 <button
                   type="button"
                   aria-expanded={isOpen}
                   aria-controls={answerId}
                   onClick={() => toggleQuestion(index)}
-                  className="flex min-h-16 w-full cursor-pointer items-center justify-between gap-4 rounded-sm px-3 py-5 text-left text-lg font-semibold text-navy transition hover:bg-light-gray/25 focus-visible:bg-light-gray/35"
+                  className="flex min-h-16 w-full cursor-pointer items-center justify-between gap-4 px-5 py-5 text-left text-lg font-semibold text-navy transition duration-300 hover:bg-light-gray/25 focus-visible:bg-light-gray/35 md:px-6"
                 >
                   <span>{item.question}</span>
                   <span
                     data-state={isOpen ? "open" : "closed"}
-                    className={`grid h-8 w-8 shrink-0 place-items-center rounded-full border border-gold/45 text-gold transition duration-150 ${
+                    className={`grid h-9 w-9 shrink-0 place-items-center rounded-full border border-gold/45 text-gold transition duration-300 ${
                       isOpen ? "rotate-180 bg-gold/10" : ""
                     }`}
                     aria-hidden="true"
@@ -69,7 +69,7 @@ export function Faq() {
                   }`}
                 >
                   <div className="overflow-hidden">
-                    <p className="pb-5 pt-1 text-base leading-7 text-graphite-soft">
+                    <p className="px-5 pb-6 pt-1 text-base leading-7 text-graphite-soft md:px-6">
                       {item.answer}
                     </p>
                   </div>

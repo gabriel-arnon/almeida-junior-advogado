@@ -146,15 +146,15 @@ export function VisualContactForm() {
   return (
     <section
       aria-labelledby="formulario-contato-heading"
-      className="border border-light-gray bg-white p-4 shadow-form sm:p-5 lg:p-6"
+      className="contact-form overflow-hidden rounded-[1.5rem] border border-light-gray/80 bg-white p-4 shadow-form sm:p-5 lg:p-6"
     >
       <div className="mb-4 border-b border-light-gray pb-4">
-        <p className="text-sm font-semibold uppercase tracking-[0.16em] text-gold">
+        <p className="section-kicker text-gold">
           Contato inicial
         </p>
         <h2
           id="formulario-contato-heading"
-          className="mt-2 text-2xl font-semibold text-navy md:text-3xl"
+          className="mt-2 text-3xl font-semibold text-navy md:text-4xl"
         >
           Solicitar retorno
         </h2>
@@ -335,7 +335,7 @@ export function VisualContactForm() {
 
         <div
           id="form-status"
-          className={`rounded-sm border p-2.5 text-sm leading-6 ${statusTone}`}
+          className={`rounded-xl border p-3 text-sm leading-6 ${statusTone}`}
           role="status"
           aria-live="polite"
         >
@@ -345,7 +345,7 @@ export function VisualContactForm() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="min-h-12 w-full rounded-sm bg-navy px-5 font-semibold text-white transition hover:bg-navy/92 disabled:cursor-not-allowed disabled:bg-light-gray disabled:text-graphite-soft"
+          className="min-h-12 w-full rounded-full bg-navy px-5 font-semibold text-white shadow-[0_10px_24px_rgba(1,39,61,0.16)] transition duration-300 hover:-translate-y-0.5 hover:bg-navy/92 hover:shadow-[0_14px_30px_rgba(1,39,61,0.22)] disabled:cursor-not-allowed disabled:bg-light-gray disabled:text-graphite-soft disabled:shadow-none"
         >
           {isSubmitting ? "Enviando..." : "Enviar solicitação"}
         </button>
@@ -353,13 +353,13 @@ export function VisualContactForm() {
         <div className="grid gap-2.5 border-t border-light-gray pt-3 sm:grid-cols-2">
           <a
             href={siteConfig.whatsappHref}
-            className="flex min-h-12 items-center justify-center rounded-sm bg-navy px-5 text-center font-semibold text-white transition hover:bg-navy/92"
+            className="flex min-h-12 items-center justify-center rounded-full bg-navy px-5 text-center font-semibold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-navy/92"
           >
             Falar pelo WhatsApp
           </a>
           <a
             href={siteConfig.phoneHref}
-            className="flex min-h-12 items-center justify-center rounded-sm border border-navy px-5 text-center font-semibold text-navy transition hover:bg-navy hover:text-white"
+            className="flex min-h-12 items-center justify-center rounded-full border border-navy px-5 text-center font-semibold text-navy transition duration-300 hover:-translate-y-0.5 hover:bg-navy hover:text-white"
           >
             Ligar agora
           </a>

@@ -16,12 +16,13 @@ const config: Config = {
         "graphite-soft": "#4A5960"
       },
       fontFamily: {
-        sans: ["var(--font-inter)", "Arial", "Helvetica", "sans-serif"],
-        serif: ["var(--font-serif)", "Georgia", "serif"]
+        sans: ["var(--font-manrope)", "Arial", "Helvetica", "sans-serif"],
+        serif: ["var(--font-cormorant)", "Georgia", "serif"]
       },
       boxShadow: {
         soft: "0 18px 55px rgba(1, 39, 61, 0.12)",
-        form: "0 24px 70px rgba(1, 39, 61, 0.14)"
+        form: "0 28px 80px rgba(1, 39, 61, 0.14)",
+        lift: "0 22px 50px rgba(1, 39, 61, 0.1)"
       }
     }
   },

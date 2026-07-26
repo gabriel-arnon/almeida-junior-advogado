@@ -11,13 +11,13 @@ export function BrandMark({ variant = "light" }: BrandMarkProps) {
   return (
     <Link
       href="/"
-      className={`flex min-h-14 items-center gap-4 rounded-sm outline-offset-4 ${
+      className={`group flex min-h-14 items-center gap-4 rounded-xl outline-offset-4 ${
         isDark ? "text-white" : "text-navy"
       }`}
       aria-label={`${siteConfig.name} - página inicial`}
     >
       <span
-        className={`grid h-14 w-14 shrink-0 place-items-center rounded-sm border border-gold/70 ${
+        className={`grid h-14 w-14 shrink-0 place-items-center rounded-xl border border-gold/70 transition duration-500 group-hover:rotate-2 ${
           isDark ? "bg-white/10 text-gold" : "bg-white shadow-[0_10px_28px_rgba(1,39,61,0.08)]"
         }`}
         aria-hidden="true"
@@ -35,7 +35,7 @@ export function BrandMark({ variant = "light" }: BrandMarkProps) {
         </svg>
       </span>
       <span className="leading-tight">
-        <span className="block font-serif text-2xl font-semibold tracking-normal md:text-[1.7rem]">
+        <span className="block font-serif text-[1.7rem] font-semibold tracking-[-0.01em] md:text-[1.9rem]">
           Almeida Junior
         </span>
         <span

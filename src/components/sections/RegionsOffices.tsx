@@ -29,13 +29,13 @@ export function RegionsOffices() {
     <section className="section-y bg-light-gray/30">
       <div className="section-shell">
         <div id="regioes" className="max-w-3xl">
-          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-gold">
+          <p className="section-kicker text-gold" data-reveal>
             Regiões e escritórios
           </p>
-          <h2 className="mt-3 text-3xl font-semibold text-navy md:text-4xl">
+          <h2 className="mt-3 text-4xl font-semibold leading-tight text-navy md:text-5xl" data-reveal>
             Atendimento presencial em dois endereços confirmados
           </h2>
-          <p className="mt-4 text-base leading-7 text-graphite-soft">
+          <p className="mt-4 text-base leading-7 text-graphite-soft" data-reveal>
             {siteConfig.regionalPositioning}
           </p>
         </div>
@@ -43,10 +43,11 @@ export function RegionsOffices() {
           {offices.map((office) => (
             <address
               key={office.city}
-              className="flex h-full flex-col border border-light-gray bg-white p-5 not-italic md:p-6"
+              className="interactive-card flex h-full flex-col rounded-2xl border border-light-gray/80 bg-white p-5 not-italic shadow-[0_10px_30px_rgba(1,39,61,0.04)] md:p-7"
+              data-reveal
             >
               <div>
-                <h3 className="text-2xl font-semibold text-navy">{office.city}</h3>
+                <h3 className="text-3xl font-semibold text-navy">{office.city}</h3>
                 <p className="mt-2 text-sm font-semibold uppercase tracking-[0.12em] text-gold">
                   {office.attendance}
                 </p>
@@ -62,7 +63,7 @@ export function RegionsOffices() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={`Ver ${office.city} no Google Maps (abre em nova aba)`}
-                  className="inline-flex min-h-11 w-fit items-center gap-2 border border-navy px-4 py-2 text-sm font-semibold text-navy transition hover:bg-navy hover:text-white focus-visible:bg-navy focus-visible:text-white"
+                  className="inline-flex min-h-11 w-fit items-center gap-2 rounded-full border border-navy px-5 py-2 text-sm font-semibold text-navy transition duration-300 hover:-translate-y-0.5 hover:bg-navy hover:text-white focus-visible:bg-navy focus-visible:text-white"
                 >
                   <MapPinIcon />
                   Ver no Google Maps
@@ -72,10 +73,10 @@ export function RegionsOffices() {
           ))}
         </div>
         <div className="mt-8">
-          <h3 className="text-lg font-semibold text-navy">Áreas de atuação regional</h3>
+          <h3 className="text-2xl font-semibold text-navy">Áreas de atuação regional</h3>
           <ul className="mt-4 flex flex-wrap gap-2">
             {serviceRegions.map((region) => (
-              <li key={region} className="border border-light-gray bg-white px-3 py-2 text-sm text-graphite">
+              <li key={region} className="rounded-full border border-light-gray bg-white px-4 py-2 text-sm text-graphite shadow-[0_5px_16px_rgba(1,39,61,0.03)]">
                 {region}
               </li>
             ))}
