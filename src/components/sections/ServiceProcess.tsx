@@ -2,7 +2,10 @@ import { serviceSteps } from "@/content/services";
 
 export function ServiceProcess() {
   return (
-    <section className="section-y bg-[linear-gradient(180deg,rgba(210,220,223,0.2),rgba(210,220,223,0.42))]">
+    <section
+      className="section-y bg-[linear-gradient(180deg,rgba(210,220,223,0.2),rgba(210,220,223,0.42))]"
+      data-process-section
+    >
       <div className="section-shell">
         <div id="como-funciona" className="max-w-3xl">
           <p className="section-kicker text-gold" data-reveal>
@@ -12,12 +15,18 @@ export function ServiceProcess() {
             Atendimento objetivo, com cuidado desde o primeiro contato
           </h2>
         </div>
-        <ol className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-8 h-px overflow-hidden bg-navy/10" aria-hidden="true">
+          <span
+            className="block h-full origin-left bg-[linear-gradient(90deg,#C9A459,#01273D)]"
+            data-process-progress
+          />
+        </div>
+        <ol className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4" data-reveal-group>
           {serviceSteps.map((step, index) => (
             <li
               key={step.title}
               className="interactive-card relative overflow-hidden rounded-2xl border border-light-gray/80 bg-white p-6 shadow-[0_10px_30px_rgba(1,39,61,0.04)]"
-              data-reveal
+              data-reveal-item
             >
               <span className="grid h-11 w-11 place-items-center rounded-full bg-navy text-sm font-semibold text-white shadow-[0_8px_20px_rgba(1,39,61,0.2)]">
                 0{index + 1}

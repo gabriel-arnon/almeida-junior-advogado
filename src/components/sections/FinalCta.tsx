@@ -4,7 +4,7 @@ export function FinalCta() {
   return (
     <section className="section-y bg-light-gray/35" aria-labelledby="cta-final">
       <div className="section-shell">
-        <div className="relative grid gap-7 overflow-hidden rounded-[1.75rem] border border-gold/30 bg-navy p-7 text-white shadow-[0_26px_70px_rgba(1,39,61,0.18)] md:p-10 lg:grid-cols-[1fr_auto] lg:items-center" data-reveal>
+        <div className="relative grid gap-7 overflow-hidden rounded-[1.75rem] border border-gold/30 bg-navy p-7 text-white shadow-[0_26px_70px_rgba(1,39,61,0.18)] md:p-10 lg:grid-cols-[1fr_auto] lg:items-center">
           <div>
             <p className="section-kicker text-gold">Próximo passo</p>
             <h2

@@ -28,6 +28,7 @@ function SituationCard({ item, isFocusable = true }: { item: string; isFocusable
     <li
       tabIndex={isFocusable ? 0 : -1}
       data-situation-card
+      data-reveal-item
       className="interactive-card flex gap-2.5 rounded-xl border border-light-gray/80 bg-white p-3 text-sm font-semibold leading-5 text-graphite shadow-[0_8px_25px_rgba(1,39,61,0.035)] hover:bg-gold/5 focus-visible:border-gold focus-visible:bg-gold/5 sm:min-h-20 sm:gap-3 sm:p-3.5 sm:leading-6"
     >
       <span className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-full bg-gold/10">
@@ -91,14 +92,14 @@ export function CommonSituations() {
           <ul
             className="mt-8 hidden items-stretch gap-3 sm:grid sm:grid-cols-2 lg:gap-4"
             data-situation-list="desktop"
-            data-reveal
+            data-reveal-group
           >
             {commonSituationCards.map((item) => (
               <SituationCard key={item} item={item} />
             ))}
           </ul>
         </div>
-        <div className="lg:sticky lg:top-[9.5rem]" data-reveal="right">
+        <div className="lg:sticky lg:top-[9.5rem]">
           <span id="formulario-contato" className="anchor-marker" aria-hidden="true" />
           <VisualContactForm />
         </div>

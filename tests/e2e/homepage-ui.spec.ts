@@ -425,6 +425,19 @@ test("FAQ question rows expose expanded state and toggle by keyboard", async ({ 
   await expect(firstIcon).toHaveAttribute("data-state", "closed");
 });
 
+test("reduced motion keeps animated content visible without parallax", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+
+  const heroItem = page.locator("[data-hero-item]").first();
+  const portraitImage = page.locator("[data-motion-portrait-image]");
+  const processProgress = page.locator("[data-process-progress]");
+
+  await expect(heroItem).toHaveCSS("opacity", "1");
+  await expect(portraitImage).toHaveCSS("transform", "none");
+  await expect(processProgress).toHaveCSS("transform", /matrix\(1, 0, 0, 1, 0, 0\)|none/);
+});
+
 test("mobile homepage has no horizontal overflow", async ({ page }) => {
   const viewports = [
     { width: 320, height: 568 },

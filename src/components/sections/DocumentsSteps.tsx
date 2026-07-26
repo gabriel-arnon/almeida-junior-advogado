@@ -15,11 +15,12 @@ export function DocumentsSteps() {
             A lista serve como referência para a análise inicial. Documentos não devem ser enviados
             pelo formulário de contato e podem ser solicitados depois por canal adequado.
           </p>
-          <ul className="mt-6 flex flex-col gap-3 md:flex-1" data-reveal>
+          <ul className="mt-6 flex flex-col gap-3 md:flex-1" data-reveal-group>
             {usefulDocuments.map((item) => (
               <li
                 key={item}
                 className="interactive-card rounded-xl border border-light-gray/80 bg-white px-4 py-3 leading-7 text-graphite shadow-[0_8px_24px_rgba(1,39,61,0.035)] md:flex md:flex-1 md:items-start"
+                data-reveal-item
               >
                 {item}
               </li>
@@ -33,11 +34,12 @@ export function DocumentsSteps() {
           <h2 className="mt-3 text-4xl font-semibold leading-tight text-navy md:text-5xl" data-reveal>
             Antes de buscar orientação
           </h2>
-          <ol className="mt-6 flex flex-col gap-3 md:flex-1 md:justify-between" data-reveal>
+          <ol className="mt-6 flex flex-col gap-3 md:flex-1 md:justify-between" data-reveal-group>
             {initialSteps.map((item, index) => (
               <li
                 key={item}
                 className="interactive-card flex gap-4 rounded-xl border border-light-gray/80 bg-light-gray/20 px-4 py-3 leading-7 text-graphite md:items-start"
+                data-reveal-item
               >
                 <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-gold/15 text-sm font-bold text-gold">
                   {index + 1}

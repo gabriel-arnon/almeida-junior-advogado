@@ -27,7 +27,7 @@ export function Faq() {
         <h2 className="mt-3 text-4xl font-semibold leading-tight text-navy md:text-5xl" data-reveal>
           Respostas objetivas para o primeiro contato
         </h2>
-        <div className="mt-8 overflow-hidden rounded-2xl border border-light-gray bg-white shadow-[0_18px_50px_rgba(1,39,61,0.06)]" data-reveal>
+        <div className="mt-8 overflow-hidden rounded-2xl border border-light-gray bg-white shadow-[0_18px_50px_rgba(1,39,61,0.06)]">
           {faqItems.map((item, index) => {
             const isOpen = openQuestions.has(index);
             const answerId = `faq-answer-${index}`;
